@@ -110,10 +110,14 @@ p { margin: 0; }
 .menu nav a { padding: 12px 14px; border-radius: 10px; font-weight: 500; }
 .menu nav a:hover { background: var(--bg); }
 
-/* over the home hero: glass pill on the photo */
-body:has([data-id="B01"]) .topbar { position: absolute; top: 16px; left: 0; right: 0; background: none; border: 0; color: #fff; padding-inline: 16px; }
-body:has([data-id="B01"]) .topbar-inner { padding: 10px 14px 10px 20px; border-radius: 26px; background: var(--glass); border: 1px solid var(--glass-edge); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
-body:has([data-id="B01"]) .topnav a:hover { color: var(--sun); }
+/* over the home hero: glass pill on the photo.
+   Matches only a B01 that isn't display:none, because the App Router's segment cache
+   keeps the previous route's tree mounted (hidden via React's Activity) after navigating
+   away, and a hidden :has() match still counts — without this the header kept floating
+   as a transparent glass pill with no page content behind it on every other route. */
+body:has([data-id="B01"]:not([style*="display: none"])) .topbar { position: absolute; top: 16px; left: 0; right: 0; background: none; border: 0; color: #fff; padding-inline: 16px; }
+body:has([data-id="B01"]:not([style*="display: none"])) .topbar-inner { padding: 10px 14px 10px 20px; border-radius: 26px; background: var(--glass); border: 1px solid var(--glass-edge); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
+body:has([data-id="B01"]:not([style*="display: none"])) .topnav a:hover { color: var(--sun); }
 
 /* ---------- C03 CurrencySwitch ---------- */
 .cur-switch { display: flex; padding: 3px; border-radius: 99px; border: 1px solid color-mix(in srgb, currentColor 25%, transparent); margin-inline: 4px; }
