@@ -13,7 +13,12 @@ export async function listOffers(): Promise<(Offer & { destination_name: string 
   });
 }
 
+const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+
 export async function getOfferById(id: string): Promise<Offer | null> {
+  if (!isUuid(id)) {
+    return unwrap<Offer | null>(await getDb().from("offers").select("*").eq("slug", id).maybeSingle());
+  }
   return unwrap<Offer | null>(await getDb().from("offers").select("*").eq("id", id).maybeSingle());
 }
 
@@ -26,10 +31,12 @@ export async function listAgents(): Promise<Agent[]> {
 }
 
 export async function listOfferPhotos(offerId: string): Promise<OfferPhoto[]> {
+  if (!isUuid(offerId)) return [];
   return unwrap<OfferPhoto[]>(await getDb().from("offer_photos").select("*").eq("offer_id", offerId).order("sort_order")) ?? [];
 }
 
 export async function listOfferDates(offerId: string): Promise<OfferDate[]> {
+  if (!isUuid(offerId)) return [];
   return unwrap<OfferDate[]>(await getDb().from("offer_dates").select("*").eq("offer_id", offerId).order("start_date")) ?? [];
 }
 

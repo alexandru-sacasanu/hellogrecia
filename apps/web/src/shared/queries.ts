@@ -77,7 +77,18 @@ export async function searchOffers(f: OfferFilter = {}): Promise<OfferCardData[]
   const to = f.from ? new Date(Date.parse(f.from) + 14 * 864e5).toISOString().slice(0, 10) : null;
 
   let query = getDb().from("offers").select("*").eq("status", "live");
-  if (f.dest) query = query.eq("destination_id", f.dest);
+  if (f.dest) {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(f.dest);
+    if (isUuid) {
+      query = query.eq("destination_id", f.dest);
+    } else {
+      const destRow = unwrap<{ id: string } | null>(
+        await getDb().from("destinations").select("id").eq("slug", f.dest).maybeSingle(),
+      );
+      if (!destRow) return [];
+      query = query.eq("destination_id", destRow.id);
+    }
+  }
   if (f.type) query = query.eq("type", f.type);
   if (f.exclude) query = query.neq("slug", f.exclude);
   if (f.guests !== undefined) query = query.or(`max_guests.is.null,max_guests.gte.${guests}`);
