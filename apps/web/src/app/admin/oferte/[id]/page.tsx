@@ -38,7 +38,7 @@ export default async function EditOffer({ params }: PageProps<"/admin/oferte/[id
             </div>
           ))}
         </div>
-        <form action={addPhotoAction.bind(null, id)} className="admin-form admin-inline-form" encType="multipart/form-data">
+        <form action={addPhotoAction.bind(null, id)} className="admin-form admin-inline-form">
           <label>Poză nouă<input name="photo" type="file" accept="image/*" required /></label>
           <label>Text alternativ<input name="alt_text" placeholder="descriere scurtă a pozei" /></label>
           <button className="btn btn-sm" type="submit">Adaugă poza</button>
