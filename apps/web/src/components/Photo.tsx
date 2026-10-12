@@ -35,9 +35,10 @@ function sceneSvg(id: string, s: Scene, type?: OfferType) {
     `<linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.sea[0]}"/><stop offset="1" stop-color="${s.sea[1]}"/></linearGradient></defs>` +
     `<rect width="200" height="${H}" fill="url(#${id}a)"/><circle cx="150" cy="${H - 26}" r="13" fill="${s.sun}" opacity=".9"/>` +
     `<rect y="${H}" width="200" height="${200 - H}" fill="url(#${id}b)"/>` +
-    `<path d="M140 ${H + 4}h24M132 ${H + 12}h40M138 ${H + 22}h28" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>` +
     SHAPES[s.shape](s.land) +
-    (type ? VESSEL[type] ?? "" : "")
+    (type && VESSEL[type]
+      ? `<path d="M140 ${H + 4}h24M132 ${H + 12}h40M138 ${H + 22}h28" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>` + VESSEL[type]
+      : "")
   );
 }
 
