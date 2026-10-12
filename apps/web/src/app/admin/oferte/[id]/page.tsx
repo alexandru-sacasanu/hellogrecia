@@ -11,9 +11,9 @@ import { OfferForm } from "../OfferForm";
 // A03 Offer editor, edit mode: details form + photo manager (C09-ish admin view) + dates (C10-ish admin view)
 export default async function EditOffer({ params }: PageProps<"/admin/oferte/[id]">) {
   const { id } = await params;
-  const offer = getOfferById(id);
+  const offer = await getOfferById(id);
   if (!offer) notFound();
-  const [destinations, agents, photos, dates] = [listDestinations(), listAgents(), listOfferPhotos(id), listOfferDates(id)];
+  const [destinations, agents, photos, dates] = await Promise.all([listDestinations(), listAgents(), listOfferPhotos(id), listOfferDates(id)]);
   const dest = destinations.find((d) => d.id === offer.destination_id)!;
 
   return (

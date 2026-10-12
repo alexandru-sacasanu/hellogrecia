@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/shared/price.check.mts",
-    "seed": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/shared/db/seed.mts"
+    "check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/shared/price.check.mts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"

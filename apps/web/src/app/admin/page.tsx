@@ -2,8 +2,8 @@ import Link from "next/link";
 import { dashboardStats } from "./data";
 
 // A01 Dashboard
-export default function AdminHome() {
-  const s = dashboardStats();
+export default async function AdminHome() {
+  const s = await dashboardStats();
   return (
     <>
       <h1>Tablou de bord</h1>

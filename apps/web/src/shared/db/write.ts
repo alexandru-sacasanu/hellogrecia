@@ -1,10 +1,9 @@
-// Admin writes. Plain SQL today; becomes Supabase .insert()/.update() calls later behind the
-// same function names. Every call here is followed by revalidating the whole site (see admin/actions.ts) —
-// ponytail: single revalidatePath("/", "layout") instead of per-tag invalidation; fine at this scale,
-// revisit with cacheTag() per entity if the admin panel gets slow to see its own edits.
-import { randomUUID } from "node:crypto";
+// Admin writes: Supabase .insert()/.update()/.delete() calls behind the same function names
+// the sqlite version had. Every call here is followed by revalidating the whole site (see
+// admin/actions.ts) — ponytail: single revalidatePath("/", "layout") instead of per-tag
+// invalidation; fine at this scale, revisit with cacheTag() per entity if the admin panel
+// gets slow to see its own edits.
 import { getDb } from "./client";
-import { get, run } from "./sql";
 
 export interface OfferInput {
   slug: string; agent_id: string; destination_id: string; type: string; title: string; summary: string;
@@ -12,63 +11,65 @@ export interface OfferInput {
   price_eur: number; price_ron_override: number | null; price_per: string; max_guests: number | null; status: string;
 }
 
-export function createOffer(input: OfferInput): string {
-  const id = randomUUID();
-  run(getDb(), `INSERT INTO offers
-    (id, slug, agent_id, destination_id, type, title, summary, description, duration, included, meeting_point, cancellation_policy, price_eur, price_ron_override, price_per, max_guests, status)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    id, input.slug, input.agent_id, input.destination_id, input.type, input.title, input.summary, input.description,
-    input.duration, JSON.stringify(input.included), input.meeting_point, input.cancellation_policy, input.price_eur,
-    input.price_ron_override, input.price_per, input.max_guests, input.status,
-  );
-  return id;
+export async function createOffer(input: OfferInput): Promise<string> {
+  const { data, error } = await getDb().from("offers").insert(input).select("id").single();
+  if (error) throw error;
+  return (data as { id: string }).id;
 }
 
-export function updateOffer(id: string, input: OfferInput): void {
-  run(getDb(), `UPDATE offers SET slug=?, agent_id=?, destination_id=?, type=?, title=?, summary=?, description=?,
-    duration=?, included=?, meeting_point=?, cancellation_policy=?, price_eur=?, price_ron_override=?, price_per=?, max_guests=?, status=?
-    WHERE id=?`,
-    input.slug, input.agent_id, input.destination_id, input.type, input.title, input.summary, input.description,
-    input.duration, JSON.stringify(input.included), input.meeting_point, input.cancellation_policy, input.price_eur,
-    input.price_ron_override, input.price_per, input.max_guests, input.status, id,
-  );
+export async function updateOffer(id: string, input: OfferInput): Promise<void> {
+  const { error } = await getDb().from("offers").update(input).eq("id", id);
+  if (error) throw error;
 }
 
-export function deleteOffer(id: string): void {
-  run(getDb(), "DELETE FROM offers WHERE id = ?", id);
+export async function deleteOffer(id: string): Promise<void> {
+  const { error } = await getDb().from("offers").delete().eq("id", id);
+  if (error) throw error;
 }
 
-export function addOfferPhoto(offerId: string, storagePath: string, altText: string): void {
-  const maxRow = get<{ m: number | null }>(getDb(), "SELECT MAX(sort_order) as m FROM offer_photos WHERE offer_id = ?", offerId);
-  run(getDb(), "INSERT INTO offer_photos (id, offer_id, storage_path, sort_order, alt_text) VALUES (?,?,?,?,?)",
-    randomUUID(), offerId, storagePath, (maxRow?.m ?? -1) + 1, altText);
+export async function addOfferPhoto(offerId: string, storagePath: string, altText: string): Promise<void> {
+  const db = getDb();
+  const { data: maxRow } = await db.from("offer_photos").select("sort_order").eq("offer_id", offerId).order("sort_order", { ascending: false }).limit(1).maybeSingle();
+  const { error } = await db.from("offer_photos").insert({
+    offer_id: offerId, storage_path: storagePath, sort_order: ((maxRow as { sort_order: number } | null)?.sort_order ?? -1) + 1, alt_text: altText,
+  });
+  if (error) throw error;
 }
 
-export function deleteOfferPhoto(id: string): void {
-  run(getDb(), "DELETE FROM offer_photos WHERE id = ?", id);
+export async function deleteOfferPhoto(id: string): Promise<void> {
+  const db = getDb();
+  const { data: photo } = await db.from("offer_photos").select("storage_path").eq("id", id).maybeSingle();
+  const { error } = await db.from("offer_photos").delete().eq("id", id);
+  if (error) throw error;
+  const path = (photo as { storage_path: string } | null)?.storage_path;
+  if (path?.includes("/offer-photos/")) await db.storage.from("offer-photos").remove([path.split("/offer-photos/")[1]]);
 }
 
 export interface DateInput { start_date: string; end_date: string; capacity: number; spots_left: number; price_override_eur: number | null }
 
-export function addOfferDate(offerId: string, input: DateInput): void {
-  run(getDb(), "INSERT INTO offer_dates (id, offer_id, start_date, end_date, capacity, spots_left, price_override_eur) VALUES (?,?,?,?,?,?,?)",
-    randomUUID(), offerId, input.start_date, input.end_date, input.capacity, input.spots_left, input.price_override_eur);
+export async function addOfferDate(offerId: string, input: DateInput): Promise<void> {
+  const { error } = await getDb().from("offer_dates").insert({ offer_id: offerId, ...input });
+  if (error) throw error;
 }
 
-export function updateOfferDate(id: string, input: DateInput): void {
-  run(getDb(), "UPDATE offer_dates SET start_date=?, end_date=?, capacity=?, spots_left=?, price_override_eur=? WHERE id=?",
-    input.start_date, input.end_date, input.capacity, input.spots_left, input.price_override_eur, id);
+export async function updateOfferDate(id: string, input: DateInput): Promise<void> {
+  const { error } = await getDb().from("offer_dates").update(input).eq("id", id);
+  if (error) throw error;
 }
 
-export function deleteOfferDate(id: string): void {
-  run(getDb(), "DELETE FROM offer_dates WHERE id = ?", id);
+export async function deleteOfferDate(id: string): Promise<void> {
+  const { error } = await getDb().from("offer_dates").delete().eq("id", id);
+  if (error) throw error;
 }
 
-export function setHomeSectionActive(id: string, active: boolean): void {
-  run(getDb(), "UPDATE home_sections SET is_active = ? WHERE id = ?", active ? 1 : 0, id);
+export async function setHomeSectionActive(id: string, active: boolean): Promise<void> {
+  const { error } = await getDb().from("home_sections").update({ is_active: active }).eq("id", id);
+  if (error) throw error;
 }
 
-export function reorderHomeSections(idsInOrder: string[]): void {
+export async function reorderHomeSections(idsInOrder: string[]): Promise<void> {
   const db = getDb();
-  idsInOrder.forEach((id, i) => run(db, "UPDATE home_sections SET sort_order = ? WHERE id = ?", i + 1, id));
+  const results = await Promise.all(idsInOrder.map((id, i) => db.from("home_sections").update({ sort_order: i + 1 }).eq("id", id)));
+  const failed = results.find((r) => r.error);
+  if (failed?.error) throw failed.error;
 }

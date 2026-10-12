@@ -5,11 +5,12 @@ import { OfferForm } from "../OfferForm";
 // A03 Offer editor, create mode
 export const metadata = { title: "Ofertă nouă" };
 
-export default function NewOffer() {
+export default async function NewOffer() {
+  const [destinations, agents] = await Promise.all([listDestinations(), listAgents()]);
   return (
     <>
       <h1>Ofertă nouă</h1>
-      <OfferForm destinations={listDestinations()} agents={listAgents()} action={createOfferAction} />
+      <OfferForm destinations={destinations} agents={agents} action={createOfferAction} />
     </>
   );
 }

@@ -13,8 +13,8 @@ const TYPE_LABEL: Record<string, string> = {
   benefit_tiles: "Cele trei plăcuțe",
 };
 
-export default function HomeAdmin() {
-  const sections = listAllHomeSections();
+export default async function HomeAdmin() {
+  const sections = await listAllHomeSections();
   return (
     <>
       <h1>Pagina principală</h1>

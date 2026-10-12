@@ -7,8 +7,8 @@ export const metadata = { title: "Oferte" };
 
 const STATUS_LABEL = { live: "Live", draft: "Ciornă", archived: "Arhivată" } as const;
 
-export default function OffersAdmin() {
-  const offers = listOffers();
+export default async function OffersAdmin() {
+  const offers = await listOffers();
   return (
     <>
       <div className="admin-head">
