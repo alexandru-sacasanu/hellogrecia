@@ -41,6 +41,7 @@ export interface Offer {
 }
 
 export interface OfferPhoto {
+  id: string;
   offer_id: string;
   storage_path: string;
   sort_order: number;

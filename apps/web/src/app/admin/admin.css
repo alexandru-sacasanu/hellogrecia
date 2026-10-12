@@ -1,0 +1,67 @@
+/* Admin panel: internal tool for 2 people, so this is plain, functional and light-only —
+   deliberately not theme-aware, unlike the public site. Without resetting color-scheme here,
+   native <input type=date/number> controls render in dark-mode chrome (globals.css sets
+   color-scheme: dark under prefers-color-scheme: dark), which reads as unreadable black-on-black
+   against these light rows. */
+.admin { color-scheme: light; display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; background: #f4f5f7; color: #1a1d24; font-family: system-ui, sans-serif; }
+.admin input, .admin select, .admin textarea { color-scheme: light; }
+.admin a { color: #2457c5; text-decoration: none; }
+.admin h1 { font-family: var(--sans); font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+.admin h2 { font-size: 18px; font-weight: 700; margin: 0 0 12px; }
+.admin p { margin: 0; }
+
+.admin-side { background: #14233a; color: #e7eaf0; padding: 20px 16px; display: grid; align-content: start; gap: 24px; position: sticky; top: 0; height: 100vh; }
+.admin-logo { font-weight: 700; font-size: 16px; color: #fff; }
+.admin-logo span { opacity: .6; font-weight: 400; }
+.admin-side nav { display: grid; gap: 4px; }
+.admin-side nav a { color: #c3cadb; padding: 8px 10px; border-radius: 8px; font-size: 14px; }
+.admin-side nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
+.admin-back { margin-top: auto; font-size: 13px; color: #8ea0c2; }
+
+.admin-main { padding: 28px 32px 80px; max-width: 920px; display: grid; gap: 20px; align-content: start; }
+.admin-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.admin-note { font-size: 14px; color: #5a6072; background: #fff; border: 1px solid #e3e6ec; border-radius: 10px; padding: 12px 14px; }
+
+.admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.stat { background: #fff; border: 1px solid #e3e6ec; border-radius: 12px; padding: 16px; display: grid; gap: 4px; }
+.stat b { font-size: 28px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: #5a6072; }
+.admin-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn { display: inline-flex; align-items: center; gap: 6px; background: #14233a; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn:hover { background: #253c60; }
+.btn-ghost { background: #fff; color: #14233a; border: 1px solid #d6dae3; }
+.btn-ghost:hover { background: #f0f1f4; }
+.btn-danger { background: #fff; color: #c0392b; border: 1px solid #f0c4bd; }
+.btn-danger:hover { background: #fdf1ef; }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+
+.admin-table-wrap { overflow-x: auto; background: #fff; border: 1px solid #e3e6ec; border-radius: 12px; }
+.admin-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.admin-table th, .admin-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid #edeff3; white-space: nowrap; }
+.admin-table tbody tr:last-child td { border-bottom: 0; }
+.admin-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #7b8296; font-weight: 600; }
+.admin-settings { white-space: normal; color: #5a6072; font-size: 13px; }
+.row-inactive { opacity: .5; }
+.admin-table input { font: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid #d6dae3; border-radius: 6px; background: #fff; color: #1a1d24; }
+.admin-num { width: 72px; }
+.admin-row-actions { display: flex; gap: 6px; }
+
+.status { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.status-live { background: #e3f6e8; color: #1c7c3c; }
+.status-draft { background: #fdf0d8; color: #9a6a0a; }
+.status-archived { background: #eceef2; color: #5a6072; }
+
+.admin-form { display: grid; gap: 14px; background: #fff; border: 1px solid #e3e6ec; border-radius: 12px; padding: 18px; }
+.admin-form label { display: grid; gap: 5px; font-size: 13px; font-weight: 600; color: #3a3f4d; }
+.admin-form input, .admin-form select, .admin-form textarea { font: inherit; font-size: 14px; font-weight: 400; padding: 8px 10px; border: 1px solid #d6dae3; border-radius: 7px; background: #fff; color: #1a1d24; }
+.admin-form textarea { resize: vertical; font-family: inherit; }
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+.admin-inline-form { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) auto; align-items: end; display: grid; gap: 10px; margin-top: 12px; }
+.admin-inline-form button { height: fit-content; }
+
+.admin-section { display: grid; gap: 10px; padding-top: 8px; }
+.admin-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.admin-photo { display: grid; gap: 6px; }
+.admin-photo .photo { aspect-ratio: 4 / 3; border-radius: 8px; }
+.admin-preview-card { max-width: 300px; }
