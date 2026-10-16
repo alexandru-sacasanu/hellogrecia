@@ -14,6 +14,8 @@
     --bg: #0e1626; --surface: #17223a; --ink: #f1ece2; --muted: #9fb0c7; --line: #27344f;
     --aegean: #9ec3e6; --coral-ink: #f08a68; --shadow: 0 12px 30px rgba(0, 0, 0, .35); color-scheme: dark;
   }
+  .logo-img-dark { display: none !important; }
+  .logo-img-white { display: block !important; }
 }
 
 /* ---------- base ---------- */
@@ -97,9 +99,12 @@ p { margin: 0; }
 /* ---------- C01 Header ---------- */
 .topbar { background: var(--surface); border-bottom: 1px solid var(--line); position: relative; z-index: 20; }
 .topbar-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 16px; }
-.logo { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: .02em; line-height: 1; display: flex; align-items: center; gap: 10px; }
-.logo-mark { width: 34px; height: 34px; border-radius: 50%; border: 1px solid currentColor; display: grid; place-items: center; font-size: 19px; font-style: italic; opacity: .85; }
-.logo small { font-family: var(--sans); font-size: 13px; opacity: .7; letter-spacing: 0; }
+.logo { display: inline-flex; align-items: center; text-decoration: none; }
+.logo-img { height: 38px; width: auto; max-width: 170px; object-fit: contain; display: block; }
+.logo-img-white { display: none; }
+.logo-img-dark { display: block; }
+body:has([data-id="B01"]:not([style*="display: none"])) .logo-img-dark { display: none; }
+body:has([data-id="B01"]:not([style*="display: none"])) .logo-img-white { display: block; }
 .topnav { display: flex; gap: 30px; font-family: var(--serif); font-size: 18px; font-weight: 500; }
 .topnav a:hover { color: var(--coral-ink); }
 .tools { display: flex; align-items: center; gap: 4px; }
@@ -342,8 +347,7 @@ html:not([data-cur="EUR"]) .dest .pr .price-eur, html[data-cur="EUR"] .dest .pr 
 }
 @media (max-width: 520px) {
   .search .field { flex: 1 1 100%; }
-  .logo { font-size: 22px; }
-  .logo-mark { width: 30px; height: 30px; font-size: 16px; }
+  .logo-img { height: 32px; max-width: 130px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

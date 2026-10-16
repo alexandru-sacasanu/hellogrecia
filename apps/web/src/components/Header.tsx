@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 import { CurrencySwitch } from "./CurrencySwitch";
@@ -22,8 +23,22 @@ export function Header() {
     <header className="topbar" data-id="C01">
       <div className="topbar-inner">
         <Link className="logo" href="/" aria-label="HelloGrecia.ro, pagina principală">
-          <span className="logo-mark">H</span>
-          <span>HelloGrecia<small>.ro</small></span>
+          <Image
+            src="/logo-dark.png"
+            alt="HelloGrecia"
+            width={150}
+            height={40}
+            priority
+            className="logo-img logo-img-dark"
+          />
+          <Image
+            src="/logo-white.png"
+            alt="HelloGrecia"
+            width={150}
+            height={40}
+            priority
+            className="logo-img logo-img-white"
+          />
         </Link>
         <nav className="topnav" aria-label="Principal">
           {LINKS.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>)}

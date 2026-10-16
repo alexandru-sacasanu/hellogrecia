@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 // C18 Footer. ANPC and its SAL (alternative dispute resolution) link are required for Romanian online shops.
@@ -6,7 +7,22 @@ export function Footer() {
     <footer className="footer" id="contact" data-id="C18">
       <div className="footer-inner">
         <div className="footer-brand">
-          <p className="logo"><span className="logo-mark">H</span>HelloGrecia<small>.ro</small></p>
+          <Link className="logo" href="/" aria-label="HelloGrecia.ro">
+            <Image
+              src="/logo-dark.png"
+              alt="HelloGrecia"
+              width={140}
+              height={38}
+              className="logo-img logo-img-dark"
+            />
+            <Image
+              src="/logo-white.png"
+              alt="HelloGrecia"
+              width={140}
+              height={38}
+              className="logo-img logo-img-white"
+            />
+          </Link>
           <p>Cazări, excursii, ture cu barca și croaziere în Grecia, pentru călătorii din România.</p>
           <p className="footer-pay">Card · Apple Pay · Google Pay · lei sau euro</p>
         </div>
