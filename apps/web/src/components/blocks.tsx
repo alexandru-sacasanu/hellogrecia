@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getCampaign, getDestinations, searchOffers } from "@/shared/queries";
 import type { HomeSection, OfferType } from "@/shared/types";
 import { CampaignBanner } from "./CampaignBanner";
 import { DestinationCard } from "./DestinationCard";
+import { HeroScene } from "./HeroScene";
 import { Icon } from "./Icon";
 import { OfferCard } from "./OfferCard";
 import { SearchBar } from "./SearchBar";
@@ -17,7 +17,7 @@ async function Hero({ s }: { s: S }) {
   const destinations = await getDestinations();
   return (
     <section className="hero" data-id="B01">
-      <Image className="scene" src={str(s.image, "/hero.jpg")} alt="" fill preload sizes="100vw" />
+      <HeroScene image={str(s.image) || undefined} />
       <div className="hero-inner">
         <div className="headline">
           <h1>{str(s.title)}</h1>

@@ -132,7 +132,8 @@ body:has([data-id="B01"]) .cur-switch button[aria-pressed="true"] { color: #1423
 
 /* ---------- B01 Hero ---------- */
 .hero { position: relative; color: #fff; overflow: hidden; isolation: isolate; color-scheme: dark; padding: 104px 16px 28px; background: #2a3350; }
-.hero .scene { z-index: -2; object-fit: cover; object-position: 50% 38%; }
+.hero .scene { z-index: -2; object-fit: cover; object-position: 50% 38%; transition: opacity .7s ease; }
+.hero .scene.scene-faded { opacity: 0; pointer-events: none; }
 .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(10, 16, 34, .4) 0, rgba(10, 16, 34, .12) 25%, rgba(10, 16, 34, .22) 55%, rgba(10, 16, 34, .65) 100%); }
 .hero-inner { max-width: 1240px; margin: 0 auto; }
 .headline { text-align: center; padding: clamp(32px, 7vw, 96px) 0 8px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
