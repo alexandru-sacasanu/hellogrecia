@@ -9,6 +9,8 @@ export const instant = false;
 const NAV = [
   { href: "/admin", label: "Tablou de bord" },
   { href: "/admin/oferte", label: "Oferte" },
+  { href: "/admin/destinatii", label: "Destinații" },
+  { href: "/admin/campanii", label: "Campanii" },
   { href: "/admin/home", label: "Pagina principală" },
 ];
 

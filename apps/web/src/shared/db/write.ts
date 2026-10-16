@@ -73,3 +73,38 @@ export async function reorderHomeSections(idsInOrder: string[]): Promise<void> {
   const failed = results.find((r) => r.error);
   if (failed?.error) throw failed.error;
 }
+
+export async function updateHomeSectionSettings(id: string, settings: Record<string, unknown>): Promise<void> {
+  const { error } = await getDb().from("home_sections").update({ settings }).eq("id", id);
+  if (error) throw error;
+}
+
+export async function createHomeSection(input: { type: string; settings: Record<string, unknown> }): Promise<string> {
+  const db = getDb();
+  const { data: maxRow } = await db.from("home_sections").select("sort_order").order("sort_order", { ascending: false }).limit(1).maybeSingle();
+  const sort_order = ((maxRow as { sort_order: number } | null)?.sort_order ?? 0) + 1;
+  const { data, error } = await db.from("home_sections").insert({ ...input, sort_order, is_active: true }).select("id").single();
+  if (error) throw error;
+  return (data as { id: string }).id;
+}
+
+export async function deleteHomeSection(id: string): Promise<void> {
+  const { error } = await getDb().from("home_sections").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export interface DestinationInput { slug: string; name: string; region: string; intro: string; cover_path: string | null; sort_order: number }
+
+export async function updateDestination(id: string, input: DestinationInput): Promise<void> {
+  const { error } = await getDb().from("destinations").update(input).eq("id", id);
+  if (error) throw error;
+}
+
+export interface CampaignInput {
+  title: string; subtitle: string; image_path: string | null; link: string; cta: string; placement: string; starts_at: string; ends_at: string;
+}
+
+export async function updateCampaign(id: string, input: CampaignInput): Promise<void> {
+  const { error } = await getDb().from("campaigns").update(input).eq("id", id);
+  if (error) throw error;
+}

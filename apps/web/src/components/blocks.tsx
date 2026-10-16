@@ -102,6 +102,16 @@ function BenefitTiles({ s }: { s: S }) {
   );
 }
 
+// B07 text_block: plain title + body, for admin-authored copy that doesn't fit any other block.
+function TextBlock({ s }: { s: S }) {
+  return (
+    <section className="wrap block text-block" data-id="B07">
+      <h2>{str(s.title)}</h2>
+      <p>{str(s.body)}</p>
+    </section>
+  );
+}
+
 /** Draws home_sections rows in order. Unknown types are skipped, never fatal. */
 export function HomeSections({ sections }: { sections: HomeSection[] }) {
   return sections.map((sec) => {
@@ -113,6 +123,7 @@ export function HomeSections({ sections }: { sections: HomeSection[] }) {
       case "destination_grid": return <DestinationGrid key={sec.id} s={s} />;
       case "campaign_slot": return <CampaignSlot key={sec.id} placement={str(s.placement)} />;
       case "benefit_tiles": return <BenefitTiles key={sec.id} s={s} />;
+      case "text_block": return <TextBlock key={sec.id} s={s} />;
       default: return null;
     }
   });

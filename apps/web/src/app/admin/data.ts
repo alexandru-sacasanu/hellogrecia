@@ -26,6 +26,10 @@ export async function listDestinations(): Promise<Destination[]> {
   return unwrap<Destination[]>(await getDb().from("destinations").select("*").order("sort_order")) ?? [];
 }
 
+export async function getDestinationById(id: string): Promise<Destination | null> {
+  return unwrap<Destination | null>(await getDb().from("destinations").select("*").eq("id", id).maybeSingle());
+}
+
 export async function listAgents(): Promise<Agent[]> {
   return unwrap<Agent[]>(await getDb().from("agents").select("*").order("name")) ?? [];
 }
@@ -44,8 +48,16 @@ export async function listAllHomeSections(): Promise<HomeSection[]> {
   return unwrap<HomeSection[]>(await getDb().from("home_sections").select("*").order("sort_order")) ?? [];
 }
 
+export async function getHomeSectionById(id: string): Promise<HomeSection | null> {
+  return unwrap<HomeSection | null>(await getDb().from("home_sections").select("*").eq("id", id).maybeSingle());
+}
+
 export async function listCampaigns(): Promise<Campaign[]> {
   return unwrap<Campaign[]>(await getDb().from("campaigns").select("*").order("starts_at", { ascending: false })) ?? [];
+}
+
+export async function getCampaignById(id: string): Promise<Campaign | null> {
+  return unwrap<Campaign | null>(await getDb().from("campaigns").select("*").eq("id", id).maybeSingle());
 }
 
 export async function dashboardStats() {
