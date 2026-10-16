@@ -14,7 +14,10 @@ export function HeroScene({ image }: HeroSceneProps) {
   const [isDay, setIsDay] = useState(false);
 
   useEffect(() => {
+    // Must run post-mount: the server and a visitor's browser can be in different timezones,
+    // so computing this during render (SSR or a lazy useState initializer) risks a hydration mismatch.
     const hour = new Date().getHours();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDay(hour >= 6 && hour < 18);
   }, []);
 
