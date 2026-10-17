@@ -13,13 +13,13 @@ type S = Record<string, unknown>;
 const str = (v: unknown, fallback = "") => (typeof v === "string" ? v : fallback);
 
 // B01 hero
-async function Hero({ s }: { s: S }) {
+async function Hero({ s, id }: { s: S; id: string }) {
   const destinations = await getDestinations();
   return (
     <section className="hero" data-id="B01">
       <HeroScene image={str(s.image) || undefined} />
       <div className="hero-inner">
-        <div className="headline">
+        <div className="headline" data-edit="section" data-edit-id={id}>
           <h1>{str(s.title)}</h1>
           {str(s.subtitle) && <p className="sub">{str(s.subtitle)}</p>}
           {str(s.cta) && <Link className="btn btn-light" href={str(s.cta_href, "#destinatii")}>{str(s.cta)}</Link>}
@@ -42,13 +42,13 @@ async function DestinationStrip() {
 }
 
 // B03 offer_row
-export async function OfferRow({ title, type, dest, exclude, limit = 8 }: { title: string; type?: OfferType; dest?: string; exclude?: string; limit?: number }) {
+export async function OfferRow({ title, type, dest, exclude, limit = 8, id }: { title: string; type?: OfferType; dest?: string; exclude?: string; limit?: number; id?: string }) {
   const list = await searchOffers({ type, dest, exclude, limit });
   if (list.length === 0) return null;
   const all = `/cauta?${new URLSearchParams({ ...(type && { tip: type }), ...(dest && { dest }) })}`;
   return (
     <section className="wrap block" data-id="B03">
-      <div className="sec-head">
+      <div className="sec-head" {...(id && { "data-edit": "section", "data-edit-id": id })}>
         <h2>{title}</h2>
         <Link className="see-all" href={all}>Vezi toate <Icon name="chevron" /></Link>
       </div>
@@ -60,11 +60,11 @@ export async function OfferRow({ title, type, dest, exclude, limit = 8 }: { titl
 }
 
 // B04 destination_grid
-async function DestinationGrid({ s }: { s: S }) {
+async function DestinationGrid({ s, id }: { s: S; id: string }) {
   const list = await getDestinations();
   return (
     <section className="wrap block" id="destinatii" data-id="B04">
-      <div className="sec-head">
+      <div className="sec-head" data-edit="section" data-edit-id={id}>
         <h2>{str(s.title, "Destinații")}</h2>
         {str(s.intro) && <p>{str(s.intro)}</p>}
       </div>
@@ -87,10 +87,10 @@ export async function CampaignSlot({ placement }: { placement: string }) {
 }
 
 // B06 benefit_tiles, with C17 BenefitTile inside
-function BenefitTiles({ s }: { s: S }) {
+function BenefitTiles({ s, id }: { s: S; id: string }) {
   const tiles = Array.isArray(s.tiles) ? (s.tiles as { line1: string; line2: string; tone: string }[]) : [];
   return (
-    <section className="wrap block" data-id="B06" aria-label="De ce HelloGrecia">
+    <section className="wrap block" data-id="B06" data-edit="section" data-edit-id={id} aria-label="De ce HelloGrecia">
       <div className="tiles">
         {tiles.map((t) => (
           <div key={t.line1 + t.line2} className={`tile tile-${t.tone}`} data-id="C17">
@@ -103,9 +103,9 @@ function BenefitTiles({ s }: { s: S }) {
 }
 
 // B07 text_block: plain title + body, for admin-authored copy that doesn't fit any other block.
-function TextBlock({ s }: { s: S }) {
+function TextBlock({ s, id }: { s: S; id: string }) {
   return (
-    <section className="wrap block text-block" data-id="B07">
+    <section className="wrap block text-block" data-id="B07" data-edit="section" data-edit-id={id}>
       <h2>{str(s.title)}</h2>
       <p>{str(s.body)}</p>
     </section>
@@ -117,13 +117,13 @@ export function HomeSections({ sections }: { sections: HomeSection[] }) {
   return sections.map((sec) => {
     const s = sec.settings;
     switch (sec.type) {
-      case "hero": return <Hero key={sec.id} s={s} />;
+      case "hero": return <Hero key={sec.id} s={s} id={sec.id} />;
       case "destination_strip": return <section key={sec.id} className="wrap block"><DestinationStrip /></section>;
-      case "offer_row": return <OfferRow key={sec.id} title={str(s.title)} type={str(s.type) as OfferType || undefined} dest={str(s.destination) || undefined} limit={Number(s.limit) || 8} />;
-      case "destination_grid": return <DestinationGrid key={sec.id} s={s} />;
+      case "offer_row": return <OfferRow key={sec.id} title={str(s.title)} type={str(s.type) as OfferType || undefined} dest={str(s.destination) || undefined} limit={Number(s.limit) || 8} id={sec.id} />;
+      case "destination_grid": return <DestinationGrid key={sec.id} s={s} id={sec.id} />;
       case "campaign_slot": return <CampaignSlot key={sec.id} placement={str(s.placement)} />;
-      case "benefit_tiles": return <BenefitTiles key={sec.id} s={s} />;
-      case "text_block": return <TextBlock key={sec.id} s={s} />;
+      case "benefit_tiles": return <BenefitTiles key={sec.id} s={s} id={sec.id} />;
+      case "text_block": return <TextBlock key={sec.id} s={s} id={sec.id} />;
       default: return null;
     }
   });

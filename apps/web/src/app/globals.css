@@ -355,3 +355,5 @@ html:not([data-cur="EUR"]) .dest .pr .price-eur, html[data-cur="EUR"] .dest .pr 
   .dest, .dcard, .ocard { transition: none; }
   .skeleton { animation: none; }
 }
+html.hg-edit-mode [data-edit] { cursor: pointer; outline: 2px dashed transparent; outline-offset: 2px; }
+html.hg-edit-mode [data-edit]:hover { outline-color: #ff6a3d; }

@@ -6,7 +6,7 @@ import { Photo } from "./Photo";
 // ponytail: inline and popup variants, plus view/tap counting, arrive with the campaigns admin (A07).
 export function CampaignBanner({ c }: { c: Campaign }) {
   return (
-    <aside className="campaign" data-id="C16" aria-label="Ofertă specială">
+    <aside className="campaign" data-id="C16" data-edit="campaign" data-edit-id={c.id} aria-label="Ofertă specială">
       {c.image_path && <Photo src={c.image_path} alt="" scene="" className="campaign-photo" sizes="100vw" />}
       <div className="campaign-text">
         <p className="eyebrow">Ofertă limitată</p>

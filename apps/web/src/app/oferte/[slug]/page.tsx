@@ -46,7 +46,7 @@ async function OfferView({ params }: Pick<PageProps<"/oferte/[slug]">, "params">
         </nav>
         <Gallery photos={d.photos} scene={dest.slug} type={o.type} title={o.title} />
         <div className="offer-layout">
-          <div className="offer-main">
+          <div className="offer-main" data-edit="offer" data-edit-id={o.id}>
             <p className="eyebrow">{TYPE_LABEL[o.type]} · {dest.name}</p>
             <h1>{o.title}</h1>
             <p className="lede">{o.summary}</p>

@@ -12,6 +12,7 @@ const NAV = [
   { href: "/admin/destinatii", label: "Destinații" },
   { href: "/admin/campanii", label: "Campanii" },
   { href: "/admin/home", label: "Pagina principală" },
+  { href: "/admin/editor", label: "Editor live" },
 ];
 
 export const metadata = { title: { template: "%s · Admin HelloGrecia", default: "Admin" }, robots: { index: false } };

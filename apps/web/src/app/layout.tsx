@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Figtree } from "next/font/google";
+import Script from "next/script";
+import { Suspense } from "react";
+import { EditModeBridge } from "@/components/EditModeBridge";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import "./globals.css";
@@ -19,13 +22,18 @@ const CURRENCY = `try{if(localStorage.getItem("hg-cur")==="EUR")document.documen
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ro" className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: CURRENCY }} />
-      </head>
       <body>
-        <Header />
+        <Script id="currency-flash-prevention" strategy="beforeInteractive">{CURRENCY}</Script>
+        <Suspense>
+          <EditModeBridge />
+        </Suspense>
+        <Suspense>
+          <Header />
+        </Suspense>
         <main>{children}</main>
-        <Footer />
+        <Suspense>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

@@ -1,8 +1,11 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // C18 Footer. ANPC and its SAL (alternative dispute resolution) link are required for Romanian online shops.
 export function Footer() {
+  if (usePathname().startsWith("/admin")) return null;
   return (
     <footer className="footer" id="contact" data-id="C18">
       <div className="footer-inner">

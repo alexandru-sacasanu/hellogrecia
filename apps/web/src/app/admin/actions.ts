@@ -88,6 +88,32 @@ export async function createOfferAction(fd: FormData) {
   redirect(`/admin/oferte/${id}`);
 }
 
+// A10 pool: bulk-add placeholders fast (title, destination, type, price only), rest gets
+// draft defaults so it satisfies the schema; admin fills in the real copy/photos/dates later.
+export async function quickCreateOfferAction(fd: FormData) {
+  const title = str(fd, "title");
+  const slug = `${title.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${randomUUID().slice(0, 6)}`;
+  await write.createOffer({
+    slug,
+    agent_id: str(fd, "agent_id"),
+    destination_id: str(fd, "destination_id"),
+    type: str(fd, "type") as OfferType,
+    title,
+    summary: "De completat.",
+    description: "De completat.",
+    duration: "De completat",
+    included: [],
+    meeting_point: "De completat",
+    cancellation_policy: "De completat",
+    price_eur: num(fd, "price_eur"),
+    price_ron_override: null,
+    price_per: "person",
+    max_guests: null,
+    status: "draft",
+  });
+  revalidateAll();
+}
+
 export async function updateOfferAction(id: string, fd: FormData) {
   await write.updateOffer(id, offerFromForm(fd));
   revalidateAll();
@@ -97,6 +123,13 @@ export async function deleteOfferAction(id: string) {
   await write.deleteOffer(id);
   revalidateAll();
   redirect("/admin/oferte");
+}
+
+// Same delete, no redirect — for callers embedded elsewhere (the live editor modal) that
+// handle leaving the view themselves.
+export async function deleteOfferInPlaceAction(id: string) {
+  await write.deleteOffer(id);
+  revalidateAll();
 }
 
 // Photos go to the "offer-photos" Supabase Storage bucket (public); storage_path stays
@@ -179,6 +212,26 @@ export async function updateDestinationAction(id: string, fd: FormData) {
     slug: str(fd, "slug"), name: str(fd, "name"), region: str(fd, "region"), intro: str(fd, "intro"),
     cover_path, sort_order: num(fd, "sort_order"),
   });
+  revalidateAll();
+}
+
+// Quick-add for the destinations dashboard's per-region page: name + region only, rest gets
+// placeholder defaults — finish it from the normal destination editor later.
+export async function quickCreateDestinationAction(fd: FormData) {
+  const name = str(fd, "name");
+  const region = str(fd, "region");
+  const slug = `${name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${randomUUID().slice(0, 6)}`;
+  await write.createDestination({ slug, name, region, intro: "De completat.", cover_path: null, sort_order: 0 });
+  revalidateAll();
+}
+
+export async function deleteDestinationAction(id: string, region: string) {
+  const db = getDb();
+  const { count } = await db.from("offers").select("id", { count: "exact", head: true }).eq("destination_id", id);
+  if (count && count > 0) {
+    redirect(`/admin/destinatii/categorie/${encodeURIComponent(region)}?delete_error=${encodeURIComponent(`Nu poți șterge — are ${count} ${count === 1 ? "ofertă legată" : "oferte legate"}. Mută-le sau șterge-le întâi.`)}`);
+  }
+  await write.deleteDestination(id);
   revalidateAll();
 }
 

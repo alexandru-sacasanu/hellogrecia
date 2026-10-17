@@ -5,6 +5,7 @@ export const TYPE_LABEL: Record<OfferType, string> = {
   trip: "Excursie",
   boat: "Barcă",
   cruise: "Croazieră",
+  atv: "ATV",
 };
 
 export const TYPE_PLURAL: Record<OfferType, string> = {
@@ -12,6 +13,7 @@ export const TYPE_PLURAL: Record<OfferType, string> = {
   trip: "Excursii",
   boat: "Ture cu barca",
   cruise: "Croaziere",
+  atv: "Tururi ATV",
 };
 
 export const OFFER_TYPES = Object.keys(TYPE_LABEL) as OfferType[];

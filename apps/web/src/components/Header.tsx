@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import type { MouseEvent } from "react";
 import { CurrencySwitch } from "./CurrencySwitch";
 import { Icon } from "./Icon";
@@ -19,6 +20,10 @@ const closeMenu = (e: MouseEvent<HTMLElement>) => {
 };
 
 export function Header() {
+  // Admin has its own shell (admin/layout.tsx); hidden there and inside the editor iframe.
+  const isAdmin = usePathname().startsWith("/admin");
+  const isEditPreview = useSearchParams().get("hg-edit") === "1";
+  if (isAdmin || isEditPreview) return null;
   return (
     <header className="topbar" data-id="C01">
       <div className="topbar-inner">

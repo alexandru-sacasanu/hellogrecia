@@ -1,7 +1,7 @@
 // Mirrors the planned Supabase tables. Replace with generated types once the database exists.
 // No React or DOM imports in src/shared: this folder moves to packages/shared when the Expo app starts.
 
-export type OfferType = "stay" | "trip" | "boat" | "cruise";
+export type OfferType = "stay" | "trip" | "boat" | "cruise" | "atv";
 export type PricePer = "person" | "stay" | "group";
 export type Currency = "RON" | "EUR";
 

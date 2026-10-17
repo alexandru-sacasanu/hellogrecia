@@ -9,7 +9,7 @@ export function DestinationCard({ d, variant }: { d: DestinationWithStats; varia
   const href = `/destinatii/${d.slug}`;
   if (variant === "tile") {
     return (
-      <div className="dest" data-id="C05">
+      <div className="dest" data-id="C05" data-edit="destination" data-edit-id={d.id}>
         <Photo src={d.cover_path} alt="" scene={d.slug} sizes="200px" />
         {d.from && <span className="pr">de la <Price value={d.from} /></span>}
         <FavoriteButton label={d.name} />
@@ -21,7 +21,7 @@ export function DestinationCard({ d, variant }: { d: DestinationWithStats; varia
     );
   }
   return (
-    <article className="dcard" data-id="C05">
+    <article className="dcard" data-id="C05" data-edit="destination" data-edit-id={d.id}>
       <Photo src={d.cover_path} alt="" scene={d.slug} className="dcard-photo" />
       <div className="dcard-body">
         <div>

@@ -10,7 +10,7 @@ export function OfferCard({ c }: { c: OfferCardData }) {
   const { offer: o, destination: d } = c;
   const note = c.next_date ? spotsNote(c.next_date.spots_left, o.price_per) : "Fără date disponibile";
   return (
-    <article className="ocard" data-id="C06">
+    <article className="ocard" data-id="C06" data-edit="offer" data-edit-id={o.id}>
       <div className="ocard-photo">
         <Photo src={c.photo?.storage_path ?? null} alt="" scene={d.slug} type={o.type} />
         <span className="tag">{TYPE_LABEL[o.type]}</span>

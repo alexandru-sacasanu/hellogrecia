@@ -39,7 +39,7 @@ async function DestinationView({ params }: Pick<PageProps<"/destinatii/[slug]">,
     <>
       <header className="dest-hero">
         <Photo src={d.cover_path} alt={d.name} scene={d.slug} className="dest-hero-photo" sizes="(max-width: 700px) 100vw, 50vw" preload />
-        <div>
+        <div data-edit="destination" data-edit-id={d.id}>
           <p className="eyebrow">{d.region}</p>
           <h1>{d.name}</h1>
           <p className="lede">{d.intro}</p>

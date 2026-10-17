@@ -100,6 +100,17 @@ export async function updateDestination(id: string, input: DestinationInput): Pr
   if (error) throw error;
 }
 
+export async function createDestination(input: DestinationInput): Promise<string> {
+  const { data, error } = await getDb().from("destinations").insert(input).select("id").single();
+  if (error) throw error;
+  return (data as { id: string }).id;
+}
+
+export async function deleteDestination(id: string): Promise<void> {
+  const { error } = await getDb().from("destinations").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export interface CampaignInput {
   title: string; subtitle: string; image_path: string | null; link: string; cta: string; placement: string; starts_at: string; ends_at: string;
 }
